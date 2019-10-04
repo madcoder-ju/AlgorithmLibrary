@@ -1,9 +1,9 @@
 /*
 solves the congruence equations
   x=r1(mod m1)
-  x=r2(mod m3)
+  x=r2(mod m2)
   x=r3(mod m3)
-  x=r3(mod m2)
+  x=r4(mod m4)
 finds minimum x modulo m
 rr is the remainder array
 mm is the modulo array
