@@ -38,8 +38,19 @@ template<class T> inline T crt(vector<T>M, vector<T>A) ///gcd(mo[i],mo[j]) = 1, 
  is invalid.Otherwise, returns x, where x is the solution unique to mod L */
 
 typedef __int128 INT;///Test first for support __int128
-template<class T> T chinese_remainder_theorem( vector<T> M, vector<T> A )
-{
+template<class T> T egcd(T a, T b, T &x, T &y) { ///return ax+by=gcd(a,b)
+    if(b == 0) {
+        x = 1, y = 0;
+        return a;
+    }
+    T x1, y1;
+    T g = egcd(b, a%b, x1, y1);
+    x = y1, y = x1-(a/b)*y1;
+    return g;
+}
+///Chinese remainder theorem:
+///Test first for support __int128
+template<class T> T crt( vector<T> M, vector<T> A ) {
     /**returns {x,L}, where x is the solution unique to mod L*/
     if(A.size() != M.size())
         return -1; /** Invalid input*/
@@ -48,8 +59,7 @@ template<class T> T chinese_remainder_theorem( vector<T> M, vector<T> A )
     INT m1 = M[0];
     /** Initially x = a_0 (mod m_0)*/
     /** Merge the solution with remaining equations */
-    for ( int i = 1; i < n; i++ )
-    {
+    for ( int i = 1; i < n; i++ ) {
         INT a2 = A[i];
         INT m2 = M[i];
         INT g = __gcd(m1, m2);
@@ -67,5 +77,5 @@ template<class T> T chinese_remainder_theorem( vector<T> M, vector<T> A )
             a1 += mod; /** Result is not suppose to be negative*/
         m1 = mod;
     }
-    return a1==0 ? m1 : a1; ///This result is for moduli m1
+    return a1 % m1; ///This result is for moduli m1
 }
