@@ -1,0 +1,67 @@
+/*
+multiplicative function: if p and q are
+relative prime then f(pq)=f(p)f(q).
+*/
+
+/*linear seive to calculate multplicative function*/
+/*
+phi function: phi(x),number of integer
+from 1 to x coprime with x
+*/
+bool isComposit[N+2];int prime[N/10+2],p,phi[N+2];
+void linearSieve(int n)
+{
+  isComposit[0]=isComposit[1]=1;
+  for(int i=2;i<=n;i++)
+  {
+    //for prime.
+    if(!isComposit[i])prime[++p]=i,phi[i]=i-1;
+    for(int j=1;j<=p&&i*prime[j]<=n;j++)
+    {
+      isComposit[i*prime[j]]=1;
+      //if p and q are not coprime.
+      if(i%prime[j]==0)
+      {
+        phi[i*prime[j]]=phi[i]*prime[j];
+        break;
+      }
+      //p and q are coprime.
+      else phi[i*prime[j]]=phi[i]*phi[prime[j]];
+    }
+  }
+}
+/*
+Mobius function: 
+μ(n)=  1 if n is square-free with even number of prime factors.
+μ(n)= −1 if n is square-free with odd number of prime factors.
+μ(n)=  0 if n has atleast one squared prime factor.
+*/
+bool isComposit[N+2];
+int prime[N/10+2],p,mob[N+2];
+void linearSieve(int n)
+{
+  isComposit[0]=isComposit[1]=1;
+  mob[0]=mob[1]=1;
+  for(int i=2;i<=n;i++)
+  {
+    if(!isComposit[i])prime[++p]=i,mob[i]=-1;
+    for(int j=1;j<=p&&i*prime[j]<=n;j++)
+    {
+      isComposit[i*prime[j]]=1;
+      if(i%prime[j]==0){mob[i*prime[j]]=0;break;}
+      else mob[i*prime[j]]=mob[i]*mob[prime[j]];
+    }
+  }
+}
+
+/*
+mobius formula summation(d|n)u(d)=[n=1].
+n is the formula which has boolean value 1.
+u(d) is mobius function.
+sum
+some common formula:
+number of co-prime pair: sum(d=1 to n)u(d)((int)(n/d))^2.
+all pair gcd sum: sum(k=1 to n)k sum(d=1 to (int)n/k)u(d)((int)n/kd)^2.
+all pair lcm sum: sum(k=1 to n)k sum(d=1 to (int)n/k)u(d)d^2{(1+((int)n/kd))((int)n/kd)/2}^2.
+*/
+//https://codeforces.com/blog/entry/53925
