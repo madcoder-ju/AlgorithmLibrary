@@ -14,3 +14,23 @@ void Seive(int n)
   }
 }
 ///////////////////////////////////
++------------------+
+|   Bitwise Seive  |
++------------------+
+
+const ll N = 1e8 + 1;
+ll p, prime[ 5761461 ];
+bitset<N> vis;
+
+void sieve() {
+    vis[0] = 0;
+    for(unsigned i = 3; i < 10000; i += 2)
+        if( vis[ i ] == 0 )
+            for(unsigned j = i * i, k = i << 1; j < N; j += k)
+                vis[ j ] = 1;
+    p = 0;
+    prime[ p++ ] = 2;
+    for(unsigned i = 3; i < N; i += 2)
+        if(!vis[ i ])
+        	prime[ p++ ] = i;
+}
