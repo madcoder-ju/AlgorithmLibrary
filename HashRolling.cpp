@@ -27,6 +27,16 @@ struct PolyHash {
         }
     }
     
+    void reset(string &s) {
+        h.clear();
+        ll x = 0, y = 0;
+        for(char ch : s) {
+            x = (x * base1 + ch) % mod1;
+            y = (y * base2 + ch) % mod2;
+            h.push_back({x, y});
+        }
+    }
+    
     // getHash(int l, int r): gives the hash value of the substring S[l, r]
     pair<ll, ll> getHash(int l, int r) {
         ll x = h[ r ].first;
