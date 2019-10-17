@@ -11,7 +11,7 @@ using namespace std;
 
 using PII = pair<int,int>;
 
-const int N = 3e5;
+const int N = 1e6;
 int root, node, lson[ N ], rson[ N ], data[ N ], prior[ N ], sz[ N ], lazy[ N ];
 
 mt19937 Ran(time(0));
@@ -49,7 +49,10 @@ void update(int node) {
  */
 void propagate(int node) {
     if( node && lazy[ node ] ) {
-
+        lazy[ node ] ^= 1;
+        swap(lson[ node ], rson[ node ]);
+        if( lson[ node ] ) lazy[ lson[ node ] ] ^= 1;
+        if( rson[ node ] ) lazy[ rson[ node ] ] ^= 1;
     }
 }
 
@@ -78,6 +81,7 @@ int join(int l,int r) {
  */
 PII splitByValue( int node, int v ) {
     if( !node ) return {0, 0};
+    propagate(node);
     if( data[ node ] <= v ) {
         PII ret = splitByValue( rson[ node ], v );
         rson[ node ] = ret.first;
@@ -98,6 +102,7 @@ PII splitByValue( int node, int v ) {
  */
 PII splitBySize(int node,int s) {
     if( !node ) return {0, 0};
+    propagate(node);
     if( sz[ lson[ node ] ] < s ) {
         PII ret = splitBySize( rson[ node ], s - sz[ lson[ node ] ] - 1 );
         rson[ node ] = ret.first;
@@ -109,6 +114,20 @@ PII splitBySize(int node,int s) {
         update( node );
         return { ret.first, node };
     }
+}
+void ReverseConcatBack(int l, int r) {
+    PII a = splitBySize(root, l - 1);
+    PII b = splitBySize(a.second, r - l + 1);
+    lazy[ b.first ] ^= 1;
+    root = join(a.first, b.second);
+    root = join(root, b.first);
+}
+void output(int node) {
+    if( !node ) return ;
+    propagate(node);
+    output(lson[ node ]);
+    printf("%d\n", data[ node ]);
+    output(rson[ node ]);
 }
 
 int main() {
